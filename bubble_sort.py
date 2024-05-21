@@ -1,29 +1,29 @@
-def bubble_sort_recur(vs, swap_size, pointer_1, pointer_2, swap_count):
-    if swap_size < 2:
+def bubble_sort_recur(vs, end_pointer, pointer_1, pointer_2, swap_count):
+    if end_pointer < 2:
         return None
-    elif pointer_2 == swap_size:
+    elif pointer_2 == end_pointer:
         if swap_count == 0:
             return None
         else:
-            bubble_sort_recur(vs, swap_size -1, 0, 1, 0)
+            bubble_sort_recur(vs, end_pointer -1, 0, 1, 0)
     else:
         swapped = swap_or_leave(vs, pointer_1, pointer_2)
-        bubble_sort_recur(vs, swap_size, pointer_1 + 1, pointer_2 + 1, swap_count + swapped)
+        bubble_sort_recur(vs, end_pointer, pointer_1 + 1, pointer_2 + 1, swap_count + swapped)
 
 def bubble_sort_iter(vs):
-    swap_size = len(vs)
+    end_pointer = len(vs)
     pointer_1 = 0
     pointer_2 = 1
     swap_count = 0
-    while swap_size > 1:
-        if pointer_2 == swap_size:
+    while end_pointer > 1:
+        if pointer_2 == end_pointer:
             if swap_count == 0:
                 break
             else:
                 pointer_1 = 0
                 pointer_2 = 1
                 swap_count = 0
-                swap_size -= 1
+                end_pointer -= 1
         else:
             swapped = swap_or_leave(vs, pointer_1, pointer_2)
             pointer_1 += 1
