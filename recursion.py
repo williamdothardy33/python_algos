@@ -172,7 +172,65 @@ def test_index_of_x():
     s = 'abcdefghijklmnopqrstuvwxyz'
     print(index_of_x(s))
 
-test_index_of_x()
+
+def unique_path(rows, columns):
+    if rows <= 0 or columns <= 0:
+        return 0
+    elif rows == 1 and columns == 1:
+        return 1
+    else:
+        return unique_path(rows - 1, columns) + unique_path(rows, columns - 1)
+    
+def test_unique_path():
+    rows = 3
+    columns = 3
+
+    print(unique_path(rows, columns))
+
+def add_until_100(ns, ns_length, pointer=0):
+    if pointer >= ns_length:
+        return 0
+    rest = add_until_100(ns, ns_length, pointer + 1)
+    total = ns[pointer] + rest
+    if  total > 100:
+        return rest
+    else:
+        return total
+    
+def test_add_until_100():
+    ns = [100,1,101,2,102,3,103,4,104,5,105]
+    print(add_until_100(ns, len(ns)))
+
+def golomb(n, cache = {}):
+    if cache.get(n) is None:
+        if n == 1:
+            cache[n] = 1
+        else:
+            cache[n] = 1 + golomb(n - golomb(golomb(n - 1)))
+
+    return cache.get(n)
+
+
+def test_golomb():
+    print(f'n == 1 {golomb(1)}')
+    print(f'n == 2 {golomb(2)}')
+    print(f'n == 3 {golomb(3)}')
+    print(f'n == 4 {golomb(4)}')
+    print(f'n == 5 {golomb(5)}')
+    print(f'n == 6 {golomb(6)}')
+    print(f'n == 7 {golomb(7)}')
+    print(f'n == 8 {golomb(8)}')
+    print(f'n == 9 {golomb(9)}')
+    print(f'n == 10 {golomb(10)}')
+
+
+test_golomb()
+
+        
+
+
+
+
 
 
     
