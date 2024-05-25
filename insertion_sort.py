@@ -1,3 +1,16 @@
+# Notes because it was only a few days and I almost forgot how it works
+# the idea behind insertion sort is that you select a value starting at the second value in the array
+# you shift all the previous values forward if they are bigger than the current selected value
+# the first previous value that you find that is smaller than the current selected value will yield an insertion
+# you advance forward after this insertion
+# there is an edge case at 0 because there aren't any more previous values to check after that
+# You need to check that there is more values to select before you do it
+
+# in reference to quick select it takes logN recursive steps to reach the base case and each recursive
+# step partition function is partitioning roughly half the number of elements in the previous step
+# another way to think of it is that starting at the bottom of the call tree partition will need to double the amount
+# of work it did at the previous step and it will need to do this for a total log(N) steps to reach the root of the call tree
+# this is the same as 2^(log(N)) = N. 
 def insertion_sort_recur(vs, start, prev_pointer, vs_length, current_value):
     if start >= vs_length:
         return None
