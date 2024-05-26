@@ -96,7 +96,7 @@ def test_partition_iter():
     partition_iter(ns, end_idx, end_idx - 1)
     print(f'partitioned ns: {ns}')
 
-test_partition_iter()
+#test_partition_iter()
 
 def quick_sort(ns, start_idx, end_idx):
     print(f'start index: {start_idx}, end index: {end_idx}')
@@ -115,6 +115,21 @@ def quick_sort(ns, start_idx, end_idx):
         quick_sort(ns, start_idx, pivot_point - 1)
         quick_sort(ns, pivot_point + 1, end_idx)
 
+def quick_select(ns, start_idx, end_idx, ordinal):
+    if end_idx - start_idx > 1:
+        pivot_point = partition_iter(ns, end_idx, end_idx - 1, start_idx)
+        if pivot_point == ordinal - 1:
+            return ns[pivot_point]
+        elif pivot_point > ordinal - 1:
+            quick_select(ns, start_idx, pivot_point -1, ordinal)
+            result = ns[ordinal - 1]
+            return result
+        else:
+            quick_select(ns, pivot_point + 1, end_idx, ordinal)
+            result = ns[ordinal - 1]
+            return result
+
+
 
 def test_quick_sort():
     ns = [10,9,8,7,5,3,2,1,0]
@@ -124,4 +139,107 @@ def test_quick_sort():
     quick_sort(ns, start_idx, end_idx)
     print(f'ns after sorting: {ns}')
 
-test_quick_sort()
+#test_quick_sort()
+
+def test_quick_select():
+    ns = [8,5,3,2,1,1,0]
+    for o in range(1, len(ns) + 1):
+        ordinal_value = quick_select(ns, 0, len(ns) - 1, o)
+        print(f'the ordinal-{o} value is: {ordinal_value}')
+
+#test_quick_select()
+
+def product(ns, start_pointer, end_pointer):
+    result = 1
+    while start_pointer < end_pointer:
+        result *= ns[start_pointer]
+        start_pointer += 1
+    return result
+
+def largest_3product(ns):
+    ns_length = len(ns)
+    if ns_length < 4:
+        result = product(ns, 0, ns_length)
+        return result
+    else:
+        quick_sort(ns, 0, ns_length)
+        result = product(ns, ns_length - 3, ns_length)
+        return result
+    
+def missing_number(ns):
+    ns_length = len(ns)
+    quick_sort(ns, 0, ns_length)
+    pointer1 = 0
+    pointer2 = 1
+    while pointer2 < ns_length:
+        current = ns[pointer2]
+        next = ns[pointer1]
+        if next != current + 1:
+            return current + 1
+        else:
+            pointer1 += 1
+            pointer2 += 1
+
+# O(N^2) max
+
+def max_slow(ns):
+    ns_length = len(ns)
+    if ns_length == 0:
+        return None
+    if ns_length == 1:
+        return ns[0]
+    else:
+        start = 0
+        current_max = ns[start]
+        next_pointer = 1
+        while start < ns_length:
+            if next_pointer >= ns_length:
+                start += 1
+                next_pointer = start
+            elif ns[next_pointer] > current_max:
+                current_max = ns[next_pointer]
+                next_pointer += 1
+            else:
+                next_pointer += 1
+
+        return current_max
+    
+# O(NLogN)
+def max_average(ns):
+    ns_length = len(ns)
+    if ns_length == 0:
+        return None
+    if ns_length == 1:
+        return ns[0]
+    else:
+        quick_sort(ns, 0, ns_length - 1)
+        result = ns[ns_length - 1]
+        return result
+
+# O(N)
+def max_fast(ns):
+    ns_length = len(ns)
+    if ns_length == 0:
+        return None
+    if ns_length == 1:
+        return ns[0]
+    else:
+        pointer = 0
+        current_max = ns[0]
+        while pointer < ns_length:
+            if current_max < ns[pointer]:
+                current_max = ns[pointer]
+                pointer += 1
+            else:
+                pointer += 1
+        return current_max
+
+
+
+def test_max_versions():
+    ns = [81,23,21,9,101,37,92]
+    result = max_fast(ns)
+    print(f'max returned: {result}')
+
+test_max_versions()
+
