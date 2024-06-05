@@ -6,11 +6,14 @@ class tree_node(object):
         def __init__(self, data):
             self.data = data
 
-def binary_search_tree(root):
+def binary_search_tree(root = None):
     class tree(object):
         root = None
         def __init__(self, root):
             self.root = root
+        def make(self, *args):
+            for arg in args:
+                self.insert(arg)
 
         def search(self, data):
             def search_recur(node, data):
@@ -22,8 +25,8 @@ def binary_search_tree(root):
                     return search_recur(node.right, data)
             if self.root is not None:
                 return search_recur(self.root, data)
-            
-        def insert(self, data):
+        # this creates a level at each insert so not correct
+        def insert_incorrect(self, data):
             def insert_recur(parent_node, node, data):
                 if node is None:
                     if parent_node.data > data:
@@ -43,6 +46,23 @@ def binary_search_tree(root):
                 else:
                     insert_recur(self.root, self.root.right, data)
 
+        def insert(self, data):
+            def insert_recur(node, data):
+                if node.data > data:
+                    if node.left is None:
+                        node.left = tree_node(data)
+                    else:
+                        insert_recur(node.left, data)
+                else:
+                    if node.right is None:
+                        node.right = tree_node(data)
+                    else:
+                        insert_recur(node.right, data)
+
+            if self.root is None:
+                self.root = tree_node(data)
+            else:
+                insert_recur(self.root, data)
         
         def to_list(self):
             def to_list_recur(node, list):
@@ -91,50 +111,58 @@ def binary_search_tree(root):
                 
             self.root = delete_recur(self.root, data)
 
+        def show(self, node = None):
+            return self.to_list().show()
+
+
     result = tree(root)
     return result
 
 def test_binary_search_tree():
-    root = tree_node(30)
-    left1 = tree_node(15)
-    right1 = tree_node(45)
-    leftl1 = tree_node(7)
-    leftr1 = tree_node(23)
-    rightl1 = tree_node(40)
-    rightr1 = tree_node(50)
-    rightr1l2 = tree_node(47)
-    rightr1r2 = tree_node(53)
-    rightr1r2r1 = tree_node(55)
-    root.left = left1
-    root.right = right1
-    right1.left = rightl1
-    right1.right = rightr1
-    left1.left = leftl1
-    left1.right = leftr1
-    right1.right.left = rightr1l2
-    right1.right.right = rightr1r2
-    right1.right.right.right = rightr1r2r1
-    bst = binary_search_tree(root)
-    print(f'show before delete: {bst.to_list().show()}')
+    # root = tree_node(30)
+    # left1 = tree_node(15)
+    # right1 = tree_node(45)
+    # leftl1 = tree_node(7)
+    # leftr1 = tree_node(23)
+    # rightl1 = tree_node(40)
+    # rightr1 = tree_node(50)
+    # rightr1l2 = tree_node(47)
+    # rightr1r2 = tree_node(53)
+    # rightr1r2r1 = tree_node(55)
+    # root.left = left1
+    # root.right = right1
+    # right1.left = rightl1
+    # right1.right = rightr1
+    # left1.left = leftl1
+    # left1.right = leftr1
+    # right1.right.left = rightr1l2
+    # right1.right.right = rightr1r2
+    # right1.right.right.right = rightr1r2r1
+    # bst = binary_search_tree(root)
+    # print(f'show before delete: {bst.show()}')
     #bst.delete(15)
     #print(f'show after delete 15: {bst.to_list().show()}')
     #print(f'right of the root 15: {bst.root.right}')
-    bst.delete(7)
-    print(f'show after delete 7: {bst.to_list().show()}')
-    bst.delete(15)
-    print(f'show after delete 15: {bst.to_list().show()}')
-    bst.delete(23)
-    print(f'show after delete 23: {bst.to_list().show()}')
-    bst.delete(50)
-    print(f'show after delete 50: {bst.to_list().show()}')
-    bst.delete(45)
-    print(f'show after delete 45: {bst.to_list().show()}')
-    bst.delete(30)
-    print(f'show after delete 30: {bst.to_list().show()}')
-    bst.delete(40)
-    print(f'show after delete 40: {bst.to_list().show()}')
-    bst.delete(47)
-    print(f'show after delete 47: {bst.to_list().show()}')
+    # bst.delete(7)
+    # print(f'show after delete 7: {bst.show()}')
+    # bst.delete(15)
+    # print(f'show after delete 15: {bst.show()}')
+    # bst.delete(23)
+    # print(f'show after delete 23: {bst.show()}')
+    # bst.delete(50)
+    # print(f'show after delete 50: {bst.show()}')
+    # bst.delete(45)
+    # print(f'show after delete 45: {bst.show()}')
+    # bst.delete(30)
+    # print(f'show after delete 30: {bst.show()}')
+    # bst.delete(40)
+    # print(f'show after delete 40: {bst.show()}')
+    # bst.delete(47)
+    # print(f'show after delete 47: {bst.show()}')
+    bst1 = binary_search_tree()
+    bst1.make(1,5,9,2,4,10,6,3,8)
+    print(f'show after insert: {bst1.show()}')
+
 
 
 
