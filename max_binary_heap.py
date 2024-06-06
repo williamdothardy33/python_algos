@@ -58,6 +58,7 @@ def max_binary_heap():
             else:
                 return node_data
 
+#the only way you should go right is if both left and right children exist and left child is smaller than right
         def sink_recur(self, node_data, current):
             if current is not None:
                 current_data = self.underlying[current]
@@ -73,7 +74,7 @@ def max_binary_heap():
                             else:
                                 self.underlying[current] = self.sink_recur(node_data, current_right)
                         else:
-                            self.underlying[current] = self.sink_recur(node_data, current_right)
+                            self.underlying[current] = self.sink_recur(node_data, current_left)
                     else:
                         self.underlying[current] = self.sink_recur(node_data, current_left)
                 else:
@@ -111,6 +112,26 @@ def max_binary_heap():
 def test_max_binary_heap():
     mbh = max_binary_heap()
     mbh.make(1,2,3,4,17,5,8,6,4,9,3)
+    mbh.show()
+
+    print('deleting root...')
+    print(f'root is: {mbh.delete()}')
+    print(f'after deleting...')
+    mbh.show()
+
+    print('deleting root...')
+    print(f'root is: {mbh.delete()}')
+    print(f'after deleting...')
+    mbh.show()
+
+    print('deleting root...')
+    print(f'root is: {mbh.delete()}')
+    print(f'after deleting...')
+    mbh.show()
+
+    print('deleting root...')
+    print(f'root is: {mbh.delete()}')
+    print(f'after deleting...')
     mbh.show()
 
     print('deleting root...')
