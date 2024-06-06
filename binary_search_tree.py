@@ -111,57 +111,99 @@ def binary_search_tree(root = None):
                 
             self.root = delete_recur(self.root, data)
 
-        def show(self, node = None):
+        def in_order_show(self, node = None):
             return self.to_list().show()
+        
+        def pre_order_to_list(self):
+            def pre_order_to_list_recur(node, list):
+                if node is not None:
+                    data = node.data
+                    list.insert_last(data)
+                    pre_order_to_list_recur(node.left, list)
+                    pre_order_to_list_recur(node.right, list)
+            result_list = linked_list()
+            pre_order_to_list_recur(self.root, result_list)
+            return result_list
+        
+        def pre_order_show(self):
+            return self.pre_order_to_list().show()
+        
+        def is_equal(self, bst_root):
+            def is_equal_recur(node0, node1):
+                return (node0 == node1) or ((node0 is not None) and (node1 is not None)) and (node0.data == node1.data) and is_equal_recur(node0.left, node1.left) and is_equal_recur(node0.right, node1.right)
+            return is_equal_recur(self.root, bst_root)
 
 
     result = tree(root)
     return result
 
+def bst_max(node):
+    if node is not None:
+        if node.right is None:
+            return node.data
+        else:
+            return bst_max(node.right)
+
 def test_binary_search_tree():
-    # root = tree_node(30)
-    # left1 = tree_node(15)
-    # right1 = tree_node(45)
-    # leftl1 = tree_node(7)
-    # leftr1 = tree_node(23)
-    # rightl1 = tree_node(40)
-    # rightr1 = tree_node(50)
-    # rightr1l2 = tree_node(47)
-    # rightr1r2 = tree_node(53)
-    # rightr1r2r1 = tree_node(55)
-    # root.left = left1
-    # root.right = right1
-    # right1.left = rightl1
-    # right1.right = rightr1
-    # left1.left = leftl1
-    # left1.right = leftr1
-    # right1.right.left = rightr1l2
-    # right1.right.right = rightr1r2
-    # right1.right.right.right = rightr1r2r1
-    # bst = binary_search_tree(root)
-    # print(f'show before delete: {bst.show()}')
+    root = tree_node(30)
+    left1 = tree_node(15)
+    leftl1 = tree_node(7)
+    leftr1 = tree_node(23)
+    right1 = tree_node(45)
+    rightl1 = tree_node(40)
+    rightr1 = tree_node(50)
+    rightr1l2 = tree_node(47)
+    rightr1r2 = tree_node(53)
+    rightr1r2r1 = tree_node(55)
+    root.left = left1
+    root.right = right1
+    right1.left = rightl1
+    right1.right = rightr1
+    left1.left = leftl1
+    left1.right = leftr1
+    right1.right.left = rightr1l2
+    right1.right.right = rightr1r2
+    right1.right.right.right = rightr1r2r1
+    bst = binary_search_tree(root)
+    # print(f'show before delete: {bst.in_order_show()}')
     #bst.delete(15)
-    #print(f'show after delete 15: {bst.to_list().show()}')
+    #print(f'show after delete 15: {bst.to_list().in_order_show()}')
     #print(f'right of the root 15: {bst.root.right}')
     # bst.delete(7)
-    # print(f'show after delete 7: {bst.show()}')
+    # print(f'show after delete 7: {bst.in_order_show()}')
     # bst.delete(15)
-    # print(f'show after delete 15: {bst.show()}')
+    # print(f'show after delete 15: {bst.in_order_show()}')
     # bst.delete(23)
-    # print(f'show after delete 23: {bst.show()}')
+    # print(f'show after delete 23: {bst.in_order_show()}')
     # bst.delete(50)
-    # print(f'show after delete 50: {bst.show()}')
+    # print(f'show after delete 50: {bst.in_order_show()}')
     # bst.delete(45)
-    # print(f'show after delete 45: {bst.show()}')
+    # print(f'show after delete 45: {bst.in_order_show()}')
     # bst.delete(30)
-    # print(f'show after delete 30: {bst.show()}')
+    # print(f'show after delete 30: {bst.in_order_show()}')
     # bst.delete(40)
-    # print(f'show after delete 40: {bst.show()}')
+    # print(f'show after delete 40: {bst.in_order_show()}')
     # bst.delete(47)
-    # print(f'show after delete 47: {bst.show()}')
+    # print(f'show after delete 47: {bst.in_order_show()}')
     bst1 = binary_search_tree()
     bst1.make(1,5,9,2,4,10,6,3,8)
-    print(f'show after insert: {bst1.show()}')
+    print(f'show after insert bst1: {bst1.in_order_show()}')
+
+    is_equal_bst1 = tree_node(1)
+    is_equal_bst1.right = tree_node(5)
+    is_equal_bst1.right.right = tree_node(9)
+    is_equal_bst1.right.right.left = tree_node(6)
+    is_equal_bst1.right.right.left.right = tree_node(8)
+    is_equal_bst1.right.right.right = tree_node(10)
+    is_equal_bst1.right.left = tree_node(2)
+    is_equal_bst1.right.left.right = tree_node(4)
+    is_equal_bst1.right.left.right.left = tree_node(3)
+
+    #print(bst1.is_equal(is_equal_bst1))
+    #print(f'show after insert is_equalbst1: {binary_search_tree(is_equal_bst1).in_order_show()}')
+    #print(f'max of bst1 is: {bst_max(bst1.root)}')
+    print(f'pre order bst: {bst.pre_order_show()}')
+
 
 
 
