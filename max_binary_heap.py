@@ -57,8 +57,24 @@ def max_binary_heap():
                 return current_data
             else:
                 return node_data
+            
+        def bubble_iter(self, index):
+            data = self.underlying[index]
+            data_pointer = index
+            parent_pointer = int((data_pointer - 1) / 2)
+            while data_pointer > 0:
+                parent_data = self.underlying[parent_pointer]
+                if parent_data > data:
+                    break
+                else:
+                    self.underlying[parent_pointer] = data
+                    self.underlying[data_pointer] = parent_data
+                    data_pointer = parent_pointer
+                    parent_pointer = int((data_pointer - 1) / 2)
+                    
 
-#the only way you should go right is if both left and right children exist and left child is smaller than right
+
+#the only reason you should go right is if both left and right children exist and left child is smaller than right
         def sink_recur(self, node_data, current):
             if current is not None:
                 current_data = self.underlying[current]
@@ -85,10 +101,48 @@ def max_binary_heap():
             else:
                 return node_data
             
+        def sink_iter(self, index):
+            last_idx = len(self.underlying) - 1
+            data = self.underlying[index]
+            data_pointer = index
+            
+            while data_pointer < len(self.underlying):
+                left_pointer = 2 * data_pointer + 1
+                right_pointer = 2 * data_pointer + 2
+                if left_pointer <= last_idx:
+                    data_left = self.underlying[left_pointer]
+                    if right_pointer <= last_idx:
+                        data_right = self.underlying[right_pointer]
+                        if data_left > data_right:
+                            if data < data_left:
+                                self.underlying[data_pointer] = data_left
+                                self.underlying[left_pointer] = data
+                                data_pointer = left_pointer
+                            else:
+                                break
+                        else:
+                            if data < data_right:
+                                self.underlying[data_pointer] = data_right
+                                self.underlying[right_pointer] = data
+                                data_pointer = right_pointer
+                            else:
+                                break
+                    else:
+                        if data < data_left:
+                            self.underlying[data_pointer] = data_left
+                            self.underlying[left_pointer] = data
+                            data_pointer = left_pointer
+                        else:
+                            break
+                else:
+                    break
+
+        
+            
         def insert(self, data):
             self.underlying.append(data)
             current = len(self.underlying) - 1
-            self.bubble_recur(data, current)
+            self.bubble_iter(current)
 
         def delete(self):
         
@@ -98,7 +152,7 @@ def max_binary_heap():
                 last_node = len(self.underlying) - 1
                 self.underlying[root] = self.underlying[last_node]
                 root_data = self.underlying[root]
-                self.sink_recur(root_data, root)
+                self.sink_iter(root)
                 self.underlying.pop()
                 return result
             else:
