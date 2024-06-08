@@ -15,6 +15,9 @@ def doubly_linked_list(*args):
             for arg in args:
                 self.insert_last(arg)
 
+        def is_empty(self):
+            return self.first_node == None
+
         def insert_last(self, data):
             n = node(data)
             if self.first_node is None:
