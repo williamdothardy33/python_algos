@@ -16,5 +16,7 @@ def queue(*args):
         
         def peek(self):
             return self.underlying.read(0)
+        def not_empty(self):
+            return self.underlying.is_empty() == False
 
     return queue(*args)
