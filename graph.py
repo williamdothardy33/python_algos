@@ -1,5 +1,6 @@
 # this is a vertex for an undirected connected graph
 from queue_1 import queue
+
 class vertex():
     data = None
     neighbors = {}
@@ -36,8 +37,6 @@ def show(vertex):
     #dfs_show_recur(vertex, visited)
     bfs_show_iter(vertex)
 
-
-
 def test_vertex():
     alice = vertex('alice')
     bob = vertex('bob') 
@@ -62,7 +61,7 @@ def test_vertex():
     fred.add_neighbor(elise)
 
     show(alice)
-test_vertex()
+#test_vertex()
 
 
 
