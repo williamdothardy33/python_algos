@@ -1,3 +1,4 @@
+#comment so I can re commit with appropriate message
 from min_priority_queue import min_priority_queue
 
 def wd_vertex(data):
