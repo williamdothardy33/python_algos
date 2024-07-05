@@ -1,4 +1,9 @@
 #O(n^3)
+
+
+from typing import Any
+
+
 def largest_subsection_sum(ns):
     ns_length = len(ns)
     last_idx = ns_length - 1
@@ -140,11 +145,72 @@ def max_subsection(ns):
         ns_pointer += 1
     return max
 
-        
+def max_sum_right(ns, start, end):
+    sum = 0
+    max = 0
+    i = start
+    while i <= end:
+        sum = sum + ns[i]
+        if (sum > max):
+            max = sum
+        i += 1
+    return max
 
+def max_sum_left(ns, start, end):
+    sum = 0
+    max = 0
+    i = start
+    while i >= end:
+        sum = sum + ns[i]
+        if (sum > max):
+            max = sum
+        i -= 1
+    return max
+
+def max_subsection_v2(ns, start, end, max):
+    if start >= end:
+        return max
+    mid = int((start + end) / 2)
+    sum1 = max_sum_left(ns, mid, start)
+    sum2 = max_sum_right(ns, mid + 1, end)
+    total = sum1 + sum2
+    next_max = max
+    if sum1 > 0 and sum2 > 0:
+        if total > next_max:
+            next_max = total
+    elif sum1 > 0:
+        if sum1 > next_max:
+            next_max = sum1
+    else:
+        if sum2 > 0:
+            if sum2 > next_max:
+                next_max = sum2
+    print(f"for (start, end) = ({start}, {end}) the sum is: {total}\n")
+    print("\n")
+    print(f"for (start, mid) = ({start}, {mid}) the sum is: {sum1}\n")
+    print("\n")
+    print(f"for (mid + 1, end) = ({mid + 1}, {end}) the sum is: {sum2}\n")
+    print("\n")
+
+    max_subsection_v2(ns, start, mid, next_max)
+    max_subsection_v2(ns, mid + 1, end, next_max)
+    return next_max
+
+class interval(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+
+    def __call__(self, start, end):
+        self.__init__(start, end)
+        return self
+    
 def test_fun():
     ns = [-3,1,-5,1,4,-2,6,-3]
     print(f'ns is: {ns}')
-    result = max_subsection(ns)
-    print(f'the largest subsection sum of {ns} is: {result}')
+    result = max_subsection_v2(ns, 0, len(ns) - 1, 0)
+    print(f'the largest subsection sum of {ns} is: {result}\n')
+
+    
+
 test_fun()
