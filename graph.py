@@ -130,27 +130,6 @@ def shortest_path(origin, target):
     result.reverse()
     return result
     
-    alice.add_neighbor(bob)
-    alice.add_neighbor(diana)
-    alice.add_neighbor(fred)
-    bob.add_neighbor(alice)
-    bob.add_neighbor(cynthia)
-    bob.add_neighbor(diana)
-    cynthia.add_neighbor(bob)
-    diana.add_neighbor(alice)
-    diana.add_neighbor(bob)
-    diana.add_neighbor(fred)
-    elise.add_neighbor(fred)
-    fred.add_neighbor(alice)
-    fred.add_neighbor(diana)
-    fred.add_neighbor(elise)
-
-    #show(alice)
-    found = search('elise', alice)
-    print(f'vertex containing elise starting from alice is: {found}')
-    print(f'value of found is: {found.data}')
-#test_vertex()
-
 def test_shortest_path():
     idris = person('idris')
     kamil = person('kamil')
