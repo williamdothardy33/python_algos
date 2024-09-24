@@ -2,10 +2,10 @@ import random
 import time
 
 
-def swap(ns, pivot_1, pivot_2):
-    temp = ns[pivot_1]
-    ns[pivot_1] = ns[pivot_2]
-    ns[pivot_2] = temp
+def swap(ns, idx_1, idx_2):
+    temp = ns[idx_1]
+    ns[idx_1] = ns[idx_2]
+    ns[idx_2] = temp
 
 def partition_recur(ns, last_idx, pivot_index, right_pointer, left_pointer = 0):
     if ns[left_pointer] < ns[pivot_index] and left_pointer < last_idx:
@@ -64,8 +64,52 @@ def partition_iter(ns, end_idx, right_pointer, left_pointer = 0):
             left_pointer += 1
             right_pointer -= 1
 
+#the idea is to insert all the values less than the pivot to the left starting from
+#the start_idx and when done the in_offset will point to the first value bigger than the
+#pivot which you swap with the pivot value and return the offset
+def partition_iter_1(ns, start_idx, end_idx):
+    in_offset = start_idx
+    pivot_offset = end_idx
+    for i in range(start_idx, end_idx):
+        if ns[i] < ns[pivot_offset]:
+            swap(ns, in_offset, i)
+            in_offset += 1
+    swap(ns, in_offset, pivot_offset)
+    return in_offset
 
 
+#base case of only one element then it's already partitioned
+#because of preorder traversal we can be assured that any partition value will find it's partition index within the partition interval
+def quick_sort_1(ns, start_idx, end_idx):
+    if end_idx > start_idx:
+        pivot_idx = partition_iter_1(ns, start_idx, end_idx)
+        quick_sort_1(ns, start_idx, pivot_idx - 1)
+        quick_sort_1(ns, pivot_idx + 1, end_idx)
+
+def test_quick_sort_1():
+    ns = [10,9,8,7,5,3,2,1,0]
+    print(f'ns before sorting: {ns}')
+    start_idx = 0
+    end_idx = len(ns) - 1
+    quick_sort_1(ns, start_idx, end_idx)
+    print(f'ns after sorting: {ns}')
+
+test_quick_sort_1()
+
+
+def test_partition_iter_1():
+    #ns = [9,21, 33, 1,3,7,45,81]
+    ns = [81,1,23,72,4,5,23]
+    #pivot_index = random.choice(range(0, len(ns)))
+    end_idx = len(ns) - 1
+
+    print(f'ns: {ns}')
+    print(f'(pivot index, pivot value): ({end_idx}, {ns[end_idx]})')
+    print()
+    pivot_index = partition_iter_1(ns, 0, end_idx)
+    print(f"partitioned ns: {ns} with pivot index: {pivot_index}\n")
+
+test_partition_iter_1()
     
         
 
@@ -241,5 +285,5 @@ def test_max_versions():
     result = max_fast(ns)
     print(f'max returned: {result}')
 
-test_max_versions()
+#test_max_versions()
 
