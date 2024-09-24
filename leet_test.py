@@ -818,6 +818,227 @@ def longest_substring_size(s):
                 return delta_start + 1
     return max_window_size
 
+def setup_grid_dfs(table, n, m):
+    for i in range(n):
+        row = [False] * m
+        table.append(row)
+
+def adjacent_lands(grid, i, j):
+    lands = []
+    map_bottom = len(grid)
+    map_right = len(grid[0]) if map_bottom != 0 else 0
+    for delta in range(-1, 2, 2):
+        longitude = i + delta
+        latitude = j + delta
+
+        if longitude > -1 and longitude < map_bottom:
+            if grid[longitude][j] == "1":
+                lands.append([longitude, j])
+
+        if latitude > -1 and latitude < map_right:
+            if grid[i][latitude] == "1":
+                lands.append([i, latitude])
+
+    return lands
+
+    
+#a union find was suggested in the leet problem "topics" but in order to use the union find you need the edges for the graph
+# (I think) I can't think of a cheaper way to get these "tree edges" besides using dfs and since I'm already using it to find which
+#cells are connected I figure there isn't any point. 
+# I could use adjacent_lands on each "land" cell but it would give me back edges (which union find set will ignore assuming
+# the tree edges containing the vertices that make up the back edge are checked first)
+# and It doesn't seem like it's worth the cost. will think on this further.
+
+def grid_dfs(grid, i, j, discovered):
+    discovered[i][j] = True
+    nearby_lands = adjacent_lands(grid, i, j)
+    for longitude, latitude in nearby_lands:
+        if discovered[longitude][latitude] == False:
+            grid_dfs(grid, longitude, latitude, discovered)
+
+def number_of_islands(grid, discovered):
+    island_count = 0
+    map_bottom = len(grid)
+    map_right = len(grid[0]) if map_bottom != 0 else 0
+
+    for i in range(map_bottom):
+        for j in range(map_right):
+            if grid[i][j] != "0":
+                if discovered[i][j] == False:
+                    island_count += 1
+                    grid_dfs(grid, i, j, discovered)
+
+    return island_count
+
+def climbing_stairs_by_search(n, count):
+    if n < 0:
+        return count
+    if n == 0:
+        return count + 1
+    left_count = climbing_stairs_by_search(n - 1, count)
+    right_count = climbing_stairs_by_search(n - 2, left_count)
+    return right_count
+
+def climbing_stairs(n):
+    if n < 0:
+        return 0
+    if n == 0:
+        return 1
+    return climbing_stairs(n - 1) + climbing_stairs(n - 2)
+
+def climbing_stairs_dp(n):
+    row = [0] * (n + 1)
+    row[0] = 1
+    row[1] = 1
+    for i in range(2, n + 1):
+        row[i] = row[i - 1] + row[i - 2]
+
+    return row[n]
+
+def ransom_note(note, magazine):
+    letter_store = {}
+    for c in magazine:
+        if letter_store.get(c) is not None:
+            letter_store[c] += 1
+        else:
+            letter_store[c] = 1
+
+    for l in note:
+        count = letter_store.get(l)
+        if count is not None:
+            if count != 0:
+                letter_store[l] = count - 1
+            else:
+                return False
+        else:
+            return False
+    return True
+
+
+def house_robber(nums, i):
+    if i == 0:
+        return nums[i]
+    if i == 1:
+        current = nums[i]
+        previous = nums[i - 1]
+        if current > previous:
+            return current
+        return previous
+    
+    rob_and_skip = nums[i] + house_robber(nums, i - 2)
+    skip = house_robber(nums, i - 1)
+    if rob_and_skip > skip:
+        return rob_and_skip
+    return skip
+
+def house_robber_dp(nums):
+    row = [0] * len(nums)
+
+    if len(nums) > 0:
+        row[0] = nums[0]
+        if len(nums) > 1:
+            row[1] = max(nums[0], nums[1])
+
+            for i in range(2, len(nums)):
+                row[i] = max((nums[i] + row[i - 2]), row[i - 1])
+
+    print(f"row is {row}\n")
+
+    return row[len(nums) - 1]
+
+            
+
+def test_house_robber():
+    #nums = [1,2,3,1]
+    nums = [2,7,9,3,1]
+    i = len(nums) - 1
+    result = house_robber(nums, i)
+    print(f"maximum money made from robbing {nums} is {result}\n")
+
+test_house_robber()
+
+def test_house_robber_dp():
+    nums = [1,2,3,1]
+    #nums = [2,7,9,3,1]
+    i = len(nums) - 1
+    result = house_robber_dp(nums)
+    print(f"maximum money made from robbing {nums} (using dp) is {result}\n")
+
+test_house_robber_dp()
+
+
+def test_ransom_note():
+    #note = "a"
+    #magazine = "b"
+    note = "aa"
+    #magazine = "ab"
+    magazine = "aab"
+
+    result = ransom_note(note, magazine)
+
+    print(f"the ransom note '{note}' can be made with the magazine '{magazine}': {result}\n")
+
+#test_ransom_note()
+    
+
+def test_climbing_stairs_by_search():
+    #n = 2
+    #n = 3
+    n = 4
+    result = climbing_stairs_by_search(n, 0)
+    print(f"the number of ways of climbing {n} steps (using search) is {result}\n")
+
+#test_climbing_stairs_by_search()
+
+def test_climbing_stairs_dp():
+    #n = 2
+    #n = 3
+    n = 4
+    result = climbing_stairs_dp(n)
+    print(f"the number of ways of climbing {n} steps (using dp) is {result}\n")
+
+#test_climbing_stairs_dp()
+
+def test_climbing_stairs():
+    #n = 2
+    #n = 3
+    n = 4
+    result = climbing_stairs(n)
+    print(f"the number of ways of climbing {n} steps is {result}\n")
+
+#test_climbing_stairs()
+
+def test_number_of_islands():
+    # grid = [
+    #     ["1", "1", "1", "1", "0"],
+    #     ["1", "1", "0", "1", "0"],
+    #     ["1", "1", "0", "0", "0"],
+    #     ["0", "0", "0", "0", "0"]
+    # ]
+
+    grid = [
+        ["1", "1", "0", "0", "0"],
+        ["1", "1", "0", "0", "0"],
+        ["0", "0", "1", "0", "0"],
+        ["0", "0", "0", "1", "1"]
+    ]
+
+    discovered = []
+    length = len(grid)
+    width = len(grid[0]) if length != 0 else 0
+    setup_grid_dfs(discovered, length, width)
+    result = number_of_islands(grid, discovered)
+    print(f"the map has {result} island(s)\n")
+
+#test_number_of_islands()
+
+
+
+
+
+
+
+
 def test_longest_substring_size():
     s = "abcabcbb"
     #s = "bbbbb"
@@ -825,7 +1046,7 @@ def test_longest_substring_size():
     result = longest_substring_size(s)
     print(f"the string: {s} has longest substring of length: {result}\n")
 
-test_longest_substring_size()
+#test_longest_substring_size()
 
     
 
