@@ -946,7 +946,107 @@ def house_robber_dp(nums):
 
     return row[len(nums) - 1]
 
-            
+#inputs must be same length
+
+def differ_by_1(s_1, s_2):
+    count = 0
+    for i in range(0, len(s_1)):
+        if s_1[i] != s_2[i]:
+            count += 1
+            if count > 1:
+                return False
+    if count == 1:
+        return True
+    return False
+
+# note differ_by_1(s_1, s_2) == differ_by_1(s_2, s_1) 
+def graph_from(begin_word, word_list):
+    graph = {}
+    graph[begin_word] = []
+    for word in word_list:
+        if differ_by_1(begin_word, word):
+            graph[begin_word].append(word)
+
+    start = 0
+    while start < len(word_list):
+        p = word_list[start]
+        graph[p] = []
+        for i in range(start + 1, len(word_list)):
+            t = word_list[i]
+            if differ_by_1(p, t):
+                graph[p].append(t)
+        start += 1
+
+    return graph
+
+def word_ladder(begin_word, end_word, word_list):
+    found = False
+    queue = deque()
+    graph = graph_from(begin_word, word_list)
+    queue.append(begin_word)
+    discovered = {word: False for word in word_list}
+    discovered[begin_word] = True
+    parents = {}
+    parents[begin_word] = -1
+
+    while queue:
+        if found:
+            break
+        current = queue.popleft()
+        adjacent_words = graph[current]
+        for word in adjacent_words:
+            if discovered[word] != True:
+                parents[word] = current
+                queue.append(word)
+                discovered[word] = True
+                if word == end_word:
+                    found = True
+                    break
+    result = []
+    
+    if found:
+        current = end_word
+        while current != -1:
+            result.append(current)
+            current = parents[current]
+        
+        result.reverse()
+
+    return result
+
+def three_sum(nums):
+    nums.sort()
+    result = []
+    
+    if len(nums) == 3 and sum(nums) == 0:
+        result.append(nums)
+    if len(nums) > 3:
+
+        conjugate = {}
+        for i in range(nums):
+            conjugate[-nums[i]] = i
+        split_offset = 0
+
+        for i in range(len(nums)):
+            if nums[i] <= 0:
+                split_offset = i
+                if nums[i] == 0:
+                    break
+        
+        for i in range(split_offset + 1):
+            for j in range(i + 1, split_offset + 1):
+                u = nums[i]
+                v = nums[j]
+                if conjugate.get(u + v) is not None:
+                    result.append([u, v, conjugate[u + v]])
+
+        for i in range(split_offset + 1, len(nums)):
+            for j in range(i + 1, len(nums)):
+                u = nums[i]
+                v = nums[j]
+                if conjugate.get(u + v) is not None:
+                    result.append([u, v, conjugate[u + v]])
+        return result
 
 def test_house_robber():
     #nums = [1,2,3,1]
@@ -955,7 +1055,7 @@ def test_house_robber():
     result = house_robber(nums, i)
     print(f"maximum money made from robbing {nums} is {result}\n")
 
-test_house_robber()
+#test_house_robber()
 
 def test_house_robber_dp():
     nums = [1,2,3,1]
@@ -964,7 +1064,7 @@ def test_house_robber_dp():
     result = house_robber_dp(nums)
     print(f"maximum money made from robbing {nums} (using dp) is {result}\n")
 
-test_house_robber_dp()
+#test_house_robber_dp()
 
 
 def test_ransom_note():
@@ -1032,13 +1132,6 @@ def test_number_of_islands():
 
 #test_number_of_islands()
 
-
-
-
-
-
-
-
 def test_longest_substring_size():
     s = "abcabcbb"
     #s = "bbbbb"
@@ -1048,7 +1141,6 @@ def test_longest_substring_size():
 
 #test_longest_substring_size()
 
-    
 
 def test_binomial_coefficient_recur():
     row = 5
